@@ -38,6 +38,7 @@ nhams = len(hams)
 
 # Probability that a training message is spam.
 prH = nspams / ntraining
+prnotH = nhams / ntraining
 
 # Return a score proportional to the Naïve Bayes
 # log-likelihood that an instance is spam.
@@ -58,15 +59,15 @@ def score_spam(instance):
 # XXX Heavy copy-paste from above.
 def score_ham(instance):
     # Compute probability of evidence given hypothesis.
-    logprEH = list()
+    logprEnotH = list()
     for f in range(nfeatures):
         count = 0
         for tr in hams:
             if tr.features[f] == instance.features[f]:
                 count += 1
-        logprEH.append(math.log2((count + 0.5) / (nhams + 0.5)))
+        logprEnotH.append(math.log2((count + 0.5) / (nhams + 0.5)))
 
-    return sum(logprEH) * prH
+    return sum(logprEnotH) * prnotH
 
 # Score test instances.
 correct = 0
