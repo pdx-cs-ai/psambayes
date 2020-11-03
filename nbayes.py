@@ -2,17 +2,19 @@
 
 import csv, sys
 
-counts = None
+class Instance(object):
+    def __init__(self, row):
+        self.name = row[0]
+        self.label = int(row[1])
+        self.features = [int(f) for f in row[2:]]
+
 with open(sys.argv[1], "r") as f:
     reader = csv.reader(f)
-    for row in reader:
-        if counts is None:
-            counts = [0] * len(row)
-        counts[0] += 1
-        for i in range(1, len(counts)):
-            counts[i] += int(row[i])
+    instances = [Instance(row) for row in reader]
 
-print(f"n: {counts[0]}")
-print(f"c: {counts[1]}")
-for i in range(2, len(counts)):
-    print(f"f[{i-2}]: {counts[i]}")
+nfeatures = len(instances[0].features)
+
+print(f"n: {len(instances)}")
+print(f"c: {sum([i.label for i in instances])}")
+for i in range(nfeatures):
+    print(f"f[{i}]: {sum([j.features[i] for j in instances])}")
